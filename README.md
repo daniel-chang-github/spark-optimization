@@ -1,10 +1,6 @@
 # spark-optimization
 
-
-
-
-## Suppose we want to compose query in which we get for each question also the number of answers to this question for each month. See the query below which does that in a suboptimal way and try to rewrite it to achieve a more optimal plan.
-
+Suppose we want to compose query in which we get for each question also the number of answers to this question for each month. See the query below which does that in a suboptimal way and try to rewrite it to achieve a more optimal plan.
 
 ## Here are several ways one can improve performance of a Spark job
 
@@ -17,7 +13,7 @@
 
 
 ## The result of the original code.
-
+'''
 +-----------+--------------------+--------------------+-----+---+               
 |question_id|       creation_date|               title|month|cnt|
 +-----------+--------------------+--------------------+-----+---+
@@ -58,7 +54,7 @@ AdaptiveSparkPlan isFinalPlan=false
                   +- Project [question_id#0L, month(cast(creation_date#2 as date)) AS month#28]
                      +- Filter isnotnull(question_id#0L)
                         +- FileScan parquet [question_id#0L,creation_date#2] Batched: true, DataFilters: [isnotnull(question_id#0L)], Format: Parquet, Location: InMemoryFileIndex(1 paths)[file:/Users/daniel/Desktop/Data_Engineering/Spark Optimization/Optimiz..., PartitionFilters: [], PushedFilters: [IsNotNull(question_id)], ReadSchema: struct<question_id:bigint,creation_date:timestamp>
-                        
+'''                 
                         
 ## Step 1 - Enable AQE (Adaptive Query Execution)
 
