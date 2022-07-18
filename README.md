@@ -196,7 +196,7 @@ Joining two tables is one of the main transactions in Spark. It mostly requires 
 
 
 
-## Option 4 - Repartition + Join by broadcast
+## Option 4 - AQE + Repartition + Join by broadcast
 
       start_time = time.time()
 
