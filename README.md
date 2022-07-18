@@ -13,31 +13,31 @@ Suppose we want to compose query in which we get for each question also the numb
 
 
 ## The result of the original code.
-'''
-+-----------+--------------------+--------------------+-----+---+               
-|question_id|       creation_date|               title|month|cnt|
-+-----------+--------------------+--------------------+-----+---+
-|     155989|2014-12-31 20:59:...|Frost bubble form...|    1|  1|
-|     155989|2014-12-31 20:59:...|Frost bubble form...|    2|  1|
-|     155990|2014-12-31 21:51:...|The abstract spac...|    1|  2|
-|     155992|2014-12-31 22:44:...|centrifugal force...|    1|  1|
-|     155993|2014-12-31 22:56:...|How can I estimat...|    1|  1|
-|     155995|2015-01-01 00:16:...|Why should a solu...|    1|  3|
-|     155996|2015-01-01 01:06:...|Why do we assume ...|    1|  2|
-|     155996|2015-01-01 01:06:...|Why do we assume ...|    2|  1|
-|     155996|2015-01-01 01:06:...|Why do we assume ...|   11|  1|
-|     155997|2015-01-01 01:26:...|Why do square sha...|    1|  3|
-|     155999|2015-01-01 02:01:...|Diagonalizability...|    1|  1|
-|     156008|2015-01-01 03:48:...|Capturing a light...|    1|  2|
-|     156008|2015-01-01 03:48:...|Capturing a light...|   11|  1|
-|     156016|2015-01-01 05:31:...|The interference ...|    1|  1|
-|     156020|2015-01-01 06:19:...|What is going on ...|    1|  1|
-|     156021|2015-01-01 06:21:...|How to calculate ...|    2|  1|
-|     156022|2015-01-01 06:55:...|Advice on Major S...|    1|  1|
-|     156025|2015-01-01 07:32:...|Deriving the Cano...|    1|  1|
-|     156026|2015-01-01 07:49:...|Does Bell's inequ...|    1|  3|
-|     156027|2015-01-01 07:49:...|Deriving X atom f...|    1|  1|
-+-----------+--------------------+--------------------+-----+---+
+
+      +-----------+--------------------+--------------------+-----+---+               
+      |question_id|       creation_date|               title|month|cnt|
+      +-----------+--------------------+--------------------+-----+---+
+      |     155989|2014-12-31 20:59:...|Frost bubble form...|    1|  1|
+      |     155989|2014-12-31 20:59:...|Frost bubble form...|    2|  1|
+      |     155990|2014-12-31 21:51:...|The abstract spac...|    1|  2|
+      |     155992|2014-12-31 22:44:...|centrifugal force...|    1|  1|
+      |     155993|2014-12-31 22:56:...|How can I estimat...|    1|  1|
+      |     155995|2015-01-01 00:16:...|Why should a solu...|    1|  3|
+      |     155996|2015-01-01 01:06:...|Why do we assume ...|    1|  2|
+      |     155996|2015-01-01 01:06:...|Why do we assume ...|    2|  1|
+      |     155996|2015-01-01 01:06:...|Why do we assume ...|   11|  1|
+      |     155997|2015-01-01 01:26:...|Why do square sha...|    1|  3|
+      |     155999|2015-01-01 02:01:...|Diagonalizability...|    1|  1|
+      |     156008|2015-01-01 03:48:...|Capturing a light...|    1|  2|
+      |     156008|2015-01-01 03:48:...|Capturing a light...|   11|  1|
+      |     156016|2015-01-01 05:31:...|The interference ...|    1|  1|
+      |     156020|2015-01-01 06:19:...|What is going on ...|    1|  1|
+      |     156021|2015-01-01 06:21:...|How to calculate ...|    2|  1|
+      |     156022|2015-01-01 06:55:...|Advice on Major S...|    1|  1|
+      |     156025|2015-01-01 07:32:...|Deriving the Cano...|    1|  1|
+      |     156026|2015-01-01 07:49:...|Does Bell's inequ...|    1|  3|
+      |     156027|2015-01-01 07:49:...|Deriving X atom f...|    1|  1|
+      +-----------+--------------------+--------------------+-----+---+
 
 Processing time: 6.384432077407837 seconds
 
@@ -54,7 +54,7 @@ AdaptiveSparkPlan isFinalPlan=false
                   +- Project [question_id#0L, month(cast(creation_date#2 as date)) AS month#28]
                      +- Filter isnotnull(question_id#0L)
                         +- FileScan parquet [question_id#0L,creation_date#2] Batched: true, DataFilters: [isnotnull(question_id#0L)], Format: Parquet, Location: InMemoryFileIndex(1 paths)[file:/Users/daniel/Desktop/Data_Engineering/Spark Optimization/Optimiz..., PartitionFilters: [], PushedFilters: [IsNotNull(question_id)], ReadSchema: struct<question_id:bigint,creation_date:timestamp>
-'''                 
+              
                         
 ## Step 1 - Enable AQE (Adaptive Query Execution)
 
