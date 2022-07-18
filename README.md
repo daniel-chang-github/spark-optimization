@@ -39,22 +39,22 @@ Suppose we want to compose query in which we get for each question also the numb
       |     156027|2015-01-01 07:49:...|Deriving X atom f...|    1|  1|
       +-----------+--------------------+--------------------+-----+---+
 
-Processing time: 6.384432077407837 seconds
+      Processing time: 6.384432077407837 seconds
 
-== Physical Plan ==
-AdaptiveSparkPlan isFinalPlan=false
-+- Project [question_id#12L, creation_date#14, title#15, month#28, cnt#45L]
-   +- BroadcastHashJoin [question_id#12L], [question_id#0L], Inner, BuildRight, false
-      :- Filter isnotnull(question_id#12L)
-      :  +- FileScan parquet [question_id#12L,creation_date#14,title#15] Batched: true, DataFilters: [isnotnull(question_id#12L)], Format: Parquet, Location: InMemoryFileIndex(1 paths)[file:/Users/daniel/Desktop/Data_Engineering/Spark Optimization/Optimiz..., PartitionFilters: [], PushedFilters: [IsNotNull(question_id)], ReadSchema: struct<question_id:bigint,creation_date:timestamp,title:string>
-      +- BroadcastExchange HashedRelationBroadcastMode(List(input[0, bigint, true]),false), [id=#187]
-         +- HashAggregate(keys=[question_id#0L, month#28], functions=[count(1)])
-            +- Exchange hashpartitioning(question_id#0L, month#28, 200), ENSURE_REQUIREMENTS, [id=#184]
-               +- HashAggregate(keys=[question_id#0L, month#28], functions=[partial_count(1)])
-                  +- Project [question_id#0L, month(cast(creation_date#2 as date)) AS month#28]
-                     +- Filter isnotnull(question_id#0L)
-                        +- FileScan parquet [question_id#0L,creation_date#2] Batched: true, DataFilters: [isnotnull(question_id#0L)], Format: Parquet, Location: InMemoryFileIndex(1 paths)[file:/Users/daniel/Desktop/Data_Engineering/Spark Optimization/Optimiz..., PartitionFilters: [], PushedFilters: [IsNotNull(question_id)], ReadSchema: struct<question_id:bigint,creation_date:timestamp>
-              
+      == Physical Plan ==
+      AdaptiveSparkPlan isFinalPlan=false
+      +- Project [question_id#12L, creation_date#14, title#15, month#28, cnt#45L]
+         +- BroadcastHashJoin [question_id#12L], [question_id#0L], Inner, BuildRight, false
+            :- Filter isnotnull(question_id#12L)
+            :  +- FileScan parquet [question_id#12L,creation_date#14,title#15] Batched: true, DataFilters: [isnotnull(question_id#12L)], Format: Parquet, Location: InMemoryFileIndex(1 paths)[file:/Users/daniel/Desktop/Data_Engineering/Spark Optimization/Optimiz..., PartitionFilters: [], PushedFilters: [IsNotNull(question_id)], ReadSchema: struct<question_id:bigint,creation_date:timestamp,title:string>
+            +- BroadcastExchange HashedRelationBroadcastMode(List(input[0, bigint, true]),false), [id=#187]
+               +- HashAggregate(keys=[question_id#0L, month#28], functions=[count(1)])
+                  +- Exchange hashpartitioning(question_id#0L, month#28, 200), ENSURE_REQUIREMENTS, [id=#184]
+                     +- HashAggregate(keys=[question_id#0L, month#28], functions=[partial_count(1)])
+                        +- Project [question_id#0L, month(cast(creation_date#2 as date)) AS month#28]
+                           +- Filter isnotnull(question_id#0L)
+                              +- FileScan parquet [question_id#0L,creation_date#2] Batched: true, DataFilters: [isnotnull(question_id#0L)], Format: Parquet, Location: InMemoryFileIndex(1 paths)[file:/Users/daniel/Desktop/Data_Engineering/Spark Optimization/Optimiz..., PartitionFilters: [], PushedFilters: [IsNotNull(question_id)], ReadSchema: struct<question_id:bigint,creation_date:timestamp>
+
                         
 ## Step 1 - Enable AQE (Adaptive Query Execution)
 
