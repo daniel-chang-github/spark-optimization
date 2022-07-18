@@ -58,13 +58,13 @@ Suppose we want to compose query in which we get for each question also the numb
                         
 ## Option 1 - Enable AQE (Adaptive Query Execution)
 
-spark.conf.set("spark.sql.adaptive.enabled", "true")
-
 Enabling AQE will do the followings.
 
 - Dynamically coalescing shuffle partitions
 - Dynamically switching join strategies
 - Dynamically optimizing skew joins
+
+      spark.conf.set("spark.sql.adaptive.enabled", "true")
 
 
 ## Option 2 - AQE + Repartition.
