@@ -71,20 +71,20 @@ Enabling AQE will do the followings.
 
 Repartition does a full shuffle, creates new partitions, and increases the level of parallelism in the application. Adding one shuffle to the query plan might eliminate two other shuffles. Repartitioning can be performed by specific columns. It would be very useful if there are multiple joins or aggregations on the partitioned columns.
 
-start_time = time.time()
+      start_time = time.time()
 
-spark.conf.set("spark.sql.adaptive.enabled","true")
+      spark.conf.set("spark.sql.adaptive.enabled","true")
 
-answers_month = answersDF.withColumn('month', month('creation_date'))
-answers_month = answers_month.repartition(col("month"))
-answers_month = answers_month.groupBy('question_id', 'month').agg(count('*').alias('cnt'))
+      answers_month = answersDF.withColumn('month', month('creation_date'))
+      answers_month = answers_month.repartition(col("month"))
+      answers_month = answers_month.groupBy('question_id', 'month').agg(count('*').alias('cnt'))
 
-resultDF = questionsDF.join(answers_month, 'question_id').select('question_id', 'creation_date', 'title', 'month', 'cnt')
-resultDF.orderBy('question_id', 'month').show()
+      resultDF = questionsDF.join(answers_month, 'question_id').select('question_id', 'creation_date', 'title', 'month', 'cnt')
+      resultDF.orderBy('question_id', 'month').show()
 
-print("Processing time: %s seconds" % (time.time() - start_time))
-print("\n")
-resultDF.explain()
+      print("Processing time: %s seconds" % (time.time() - start_time))
+      print("\n")
+      resultDF.explain()
 
 ### Result
 
@@ -135,6 +135,19 @@ resultDF.explain()
 
 Joining two tables is one of the main transactions in Spark. It mostly requires shuffle which has a high cost due to data movement between nodes. If one of the tables is small enough, any shuffle operation may not be required. By broadcasting the small table to each node in the cluster, shuffle can be simply avoided.
 
+      spark.conf.set("spark.sql.adaptive.enabled", "true")
+
+      start_time = time.time()
+
+      answers_month = answersDF.withColumn('month', month('creation_date')).groupBy('question_id', 'month').agg(count('*').alias('cnt'))
+
+      # using broadcast() with "answers_month"
+      resultDF_2 = questionsDF.join(broadcast(answers_month), "question_id").select('question_id', 'creation_date', 'title', 'month', 'cnt')
+      resultDF_2.orderBy('question_id', 'month').show()
+
+      print("Processing time: %s seconds" % (time.time() - start_time))
+      print("\n")
+      resultDF_2.explain()
 
 ### Result
 
